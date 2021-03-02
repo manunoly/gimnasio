@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "qgimnasio": {
+      "hosting": {
+        "app": [
+          "qgimnasio"
+        ]
+      }
+    }
+  }
+}
