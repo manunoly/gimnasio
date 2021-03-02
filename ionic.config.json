@@ -1,0 +1,7 @@
+{
+  "name": "qgimnasio",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
