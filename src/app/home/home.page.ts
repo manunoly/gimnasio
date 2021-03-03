@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, ViewEncapsulation} from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 import {
@@ -18,7 +18,10 @@ import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
   CalendarView,
+  CalendarMonthViewDay,
+  CalendarWeekViewBeforeRenderEvent
 } from 'angular-calendar';
+import { WeekViewHour, WeekViewHourColumn } from 'calendar-utils';
 
 const colors: any = {
   red: {
@@ -39,16 +42,22 @@ const colors: any = {
   templateUrl: './home.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./home.page.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
+
 export class HomePage implements OnInit {
   name = 'Home Page';
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
-  view: CalendarView = CalendarView.Month;
-
-  CalendarView = CalendarView;
-
+  view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
+  clickedDate: Date;
+  clickedColumn: number;
+  CalendarView = CalendarView;
+  selectedDayViewDate: Date;
+  hourColumns: WeekViewHourColumn[];
+  selectedDays: any = [];
+  selectedMonthViewDay: CalendarMonthViewDay;
 
   modalData: {
     action: string;
@@ -156,7 +165,12 @@ export class HomePage implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    console.log(this.modalContent)
+    // this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  addEventClick(){
+
   }
 
   addEvent(): void {
@@ -176,6 +190,11 @@ export class HomePage implements OnInit {
     ];
   }
 
+  changeDay(date: Date) {
+    this.viewDate = date;
+    this.view = CalendarView.Day;
+  }
+
   deleteEvent(eventToDelete: CalendarEvent) {
     this.events = this.events.filter((event) => event !== eventToDelete);
   }
@@ -186,5 +205,60 @@ export class HomePage implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+    // mark hour
+    dayClickedMark(day: CalendarMonthViewDay): void {
+    this.selectedMonthViewDay = day;
+    const selectedDateTime = this.selectedMonthViewDay.date.getTime();
+    const dateIndex = this.selectedDays.findIndex(
+      (selectedDay) => selectedDay.date.getTime() === selectedDateTime
+    );
+    if (dateIndex > -1) {
+      delete this.selectedMonthViewDay.cssClass;
+      this.selectedDays.splice(dateIndex, 1);
+    } else {
+      this.selectedDays.push(this.selectedMonthViewDay);
+      day.cssClass = 'cal-day-selected';
+      this.selectedMonthViewDay = day;
+    }
+  }
+
+  beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+    body.forEach((day) => {
+      if (
+        this.selectedDays.some(
+          (selectedDay) => selectedDay.date.getTime() === day.date.getTime()
+        )
+      ) {
+        day.cssClass = 'cal-day-selected';
+      }
+    });
+  }
+
+  hourSegmentClicked(date: Date) {
+    this.selectedDayViewDate = date;
+    this.addSelectedDayViewClass();
+  }
+
+  beforeWeekOrDayViewRender(event: CalendarWeekViewBeforeRenderEvent) {
+    this.hourColumns = event.hourColumns;
+    this.addSelectedDayViewClass();
+  }
+
+  private addSelectedDayViewClass() {
+    this.hourColumns.forEach((column) => {
+      column.hours.forEach((hourSegment) => {
+        hourSegment.segments.forEach((segment) => {
+          delete segment.cssClass;
+          if (
+            this.selectedDayViewDate &&
+            segment.date.getTime() === this.selectedDayViewDate.getTime()
+          ) {
+            segment.cssClass = 'cal-day-selected';
+          }
+        });
+      });
+    });
   }
 }
