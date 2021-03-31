@@ -5,5 +5,48 @@
 </ion-header>
 
 <ion-content>
+  <div class="containerCenter">
 
+    <form [formGroup]="credentialForm">
+      <ion-item>
+        <ion-input
+        placeholder="Full name"
+        formControlName="fullname"
+        autofocus="true"
+        ></ion-input>
+      </ion-item>
+      <div *ngIf="(fullname.dirty || fullname.touched) && fullname.errors" class="errors">
+        <span *ngIf="fullname.errors?.required">Full name is required</span>
+        <span *ngIf="fullname.errors?.minlength">Full name needs to be 3 characters</span>
+      </div>
+
+      <ion-item>
+        <ion-input
+        placeholder="Email address"
+        formControlName="email"
+        ></ion-input>
+      </ion-item>
+      <div *ngIf="(email.dirty || email.touched) && email.errors" class="errors">
+        <span *ngIf="email.errors?.required">Email is required</span>
+        <span *ngIf="email.errors?.email">Email is invalid</span>
+      </div>
+
+      <ion-item>
+        <ion-input
+        placeholder="Password"
+        type="password"
+        formControlName="password"
+        clearInput="true"
+        ></ion-input>
+      </ion-item>
+      <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
+        <span *ngIf="password.errors?.required">Password is required</span>
+        <span *ngIf="password.errors?.minlength">Password needs to be 6 characters</span>
+      </div>
+    </form>
+
+    <ion-button [disabled]="!credentialForm.valid" expand="full">Sing up</ion-button>
+    <ion-button routerLink="/login" expand="full" color="secondary">Back to sing in</ion-button>
+
+  </div>
 </ion-content>

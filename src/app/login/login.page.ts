@@ -18,7 +18,6 @@ export class LoginPage implements OnInit {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private auth: AuthService
-    // private chatService: ChatService
   ) {}
 
   ngOnInit() {
@@ -26,29 +25,6 @@ export class LoginPage implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-  }
-
-  async signUp() {
-    const loading = await this.loadingController.create();
-    await loading.present();
-    this.auth
-      .signup(this.credentialForm.value)
-      .then(
-        (user) => {
-          loading.dismiss();
-          this.router.navigateByUrl('/home', { replaceUrl: true });
-        },
-        async (err) => {
-          loading.dismiss();
-          const alert = await this.alertController.create({
-            header: 'Sign up failed',
-            message: err.message,
-            buttons: ['OK'],
-          });
-
-          await alert.present();
-        }
-      );
   }
 
   async signIn() {

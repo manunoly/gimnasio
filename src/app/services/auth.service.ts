@@ -1,7 +1,8 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import firebase from 'firebase'
+import firebase from 'firebase';
 import { switchMap, map } from 'rxjs/operators';
 import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 
@@ -20,14 +21,19 @@ export interface Message {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   currentUser$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    private router: Router
+  ) {
     this.afAuth.onAuthStateChanged((user) => {
-      if(user){
+      if (user) {
+        console.log('afAuth user', user);
         this.currentUser$.next(user);
       } else {
         this.currentUser$.next(null);
@@ -35,21 +41,23 @@ export class AuthService {
     });
   }
 
-  async signup({ email, password, name = "Apto" }): Promise<any> {
+  async signup({ email, password, name = 'Apto' }): Promise<any> {
     const credential = await this.afAuth.createUserWithEmailAndPassword(
       email,
       password
     );
+    credential.user.updateProfile({
+      displayName: name,
+      photoURL: "https://example.com/jane-q-user/profile.jpg"
+    }).then().catch();
 
     const uid = credential.user.uid;
 
-    return this.afs.doc(
-      `users/${uid}`
-    ).set({
+    return this.afs.doc(`users/${uid}`).set({
       uid,
       email: credential.user.email,
       name: name,
-    })
+    });
   }
 
   signIn({ email, password }) {
@@ -57,7 +65,9 @@ export class AuthService {
   }
 
   signOut(): Promise<void> {
-    return this.afAuth.signOut();
+    console.log('salir');
+    this.afAuth.signOut();
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+    return;
   }
-
 }

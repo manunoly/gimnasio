@@ -4,12 +4,17 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{ name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="auth.signOut()" slot="icon-only">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="row text-center">
-    <div class="col-md-4">
+    <div class="col-md-4 col-6">
       <div class="btn-group">
         <div
           class="btn btn-primary"
@@ -38,12 +43,12 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-12">
       <button class="btn btn-success btn-block" (click)="addEvent()" [disabled]="!clickedDate">
         Reservar <span *ngIf="clickedDate"> {{ clickedDate | date:'dd/MMM/y h:mm' }} </span>
       </button>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-6">
       <div class="btn-group">
         <div
           class="btn btn-primary"
