@@ -1,23 +1,20 @@
-import { SharedModule } from './../share/share.module';
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HomePageRoutingModule } from './home-routing.module';
+import { SokkerLoginPageRoutingModule } from './sokker-login-routing.module';
 
-import { HomePage } from './home.page';
+import { SokkerLoginPage } from './sokker-login.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule,
-    SharedModule
+    SokkerLoginPageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [SokkerLoginPage]
 })
-export class HomePageModule {}
+export class SokkerLoginPageModule {}

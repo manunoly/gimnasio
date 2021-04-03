@@ -1,8 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>signUp</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-navbar [start]="false" [end]="false"></app-header-navbar>
 
 <ion-content>
   <div class="containerCenter">
@@ -45,7 +41,7 @@
       </div>
     </form>
 
-    <ion-button [disabled]="!credentialForm.valid" expand="full">Sing up</ion-button>
+    <ion-button [disabled]="!credentialForm.valid" expand="full" (click)="signUp()">Sing up</ion-button>
     <ion-button routerLink="/login" expand="full" color="secondary">Back to sing in</ion-button>
 
   </div>

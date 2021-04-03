@@ -1,0 +1,164 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="auth.signOut()" slot="icon-only">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="row text-center">
+    <div class="col-md-4 col-6">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Previous
+        </div>
+        <div
+          class="btn btn-outline-secondary"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          Today
+        </div>
+        <div
+          class="btn btn-primary"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Next
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-12">
+      <button class="btn btn-success btn-block" (click)="addEvent()" [disabled]="!clickedDate">
+        Reservar <span *ngIf="clickedDate"> {{ clickedDate | date:'dd/MMM/y h:mm' }} </span>
+      </button>
+    </div>
+    <div class="col-md-4 col-6">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Month)"
+          [class.active]="view === CalendarView.Month"
+        >
+          Month
+        </div>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+        >
+          Week
+        </div>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Day)"
+          [class.active]="view === CalendarView.Day"
+        >
+          Day
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br />
+
+  <ng-template
+  #weekViewHourSegmentTemplate
+  let-segment="segment"
+  let-locale="locale"
+  let-segmentHeight="segmentHeight"
+  let-isTimeLabel="isTimeLabel"
+>
+  <div
+    #segmentElement
+    class="cal-hour-segment"
+    [style.height.px]="segmentHeight"
+    [class.cal-hour-start]="segment.isStart"
+    [class.cal-after-hour-start]="!segment.isStart"
+    [ngClass]="segment.cssClass"
+  >
+    <div class="cal-time" *ngIf="isTimeLabel">
+      {{ segment.date | calendarDate:'weekViewHour':locale }}
+    </div>
+  </div>
+</ng-template>
+
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="'month'"
+      [viewDate]="viewDate"
+      [events]="events"
+      (columnHeaderClicked)="clickedColumn = $event.isoDayNumber"
+      (dayClicked)="changeDay($event.day.date)"
+    >
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="'week'"
+      [viewDate]="viewDate"
+      [hourSegments]="1"
+      [dayStartHour]="4"
+      [dayEndHour]="22"
+      [events]="events"
+      (dayHeaderClicked)="clickedDate = $event.day.date"
+      (hourSegmentClicked)="clickedDate = $event.date"
+      (beforeViewRender)="beforeWeekOrDayViewRender($event)"
+      (hourSegmentClicked)="hourSegmentClicked($event.date)"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="'day'"
+      [viewDate]="viewDate"
+      [hourSegments]="1"
+      [dayStartHour]="4"
+      [dayEndHour]="22"
+      [events]="events"
+      (hourSegmentClicked)="clickedDate = $event.date"
+      (beforeViewRender)="beforeWeekOrDayViewRender($event)"
+      (hourSegmentClicked)="hourSegmentClicked($event.date)"
+    >
+    </mwl-calendar-day-view>
+  </div>
+
+  <!-- Everything you see below is just for the demo, you don't need to include it in your app -->
+
+  <br /><br /><br />
+
+  <ng-template #modalContent let-close="close">
+    <div class="modal-header">
+      <h5 class="modal-title">Event action occurred</h5>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        Action:
+        <pre>{{ modalData?.action }}</pre>
+      </div>
+      <div>
+        Event:
+        <pre>{{ modalData?.event | json }}</pre>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">
+        OK
+      </button>
+    </div>
+  </ng-template>
+</ion-content>

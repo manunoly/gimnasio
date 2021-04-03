@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take, first } from 'rxjs/operators';
 import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 
 export interface User {
   uid: string;
   email: string;
+  displayName?: string;
 }
 
 export interface Message {
@@ -31,17 +32,20 @@ export class AuthService {
     private afs: AngularFirestore,
     private router: Router
   ) {
-    this.afAuth.onAuthStateChanged((user) => {
+    this.afAuth.onAuthStateChanged(async (user) => {
       if (user) {
         console.log('afAuth user', user);
         this.currentUser$.next(user);
+        let userF:User;
+        userF = await this.afs.doc(`/users/${user.uid}`).valueChanges().toPromise() as any;
+        this.currentUser$.next({...user, ...userF});
       } else {
         this.currentUser$.next(null);
       }
     });
   }
 
-  async signup({ email, password, name = 'Apto' }): Promise<any> {
+  async signup({ email, password, name = 'User' }): Promise<any> {
     const credential = await this.afAuth.createUserWithEmailAndPassword(
       email,
       password
@@ -56,7 +60,7 @@ export class AuthService {
     return this.afs.doc(`users/${uid}`).set({
       uid,
       email: credential.user.email,
-      name: name,
+      displayName: name,
     });
   }
 
@@ -65,7 +69,6 @@ export class AuthService {
   }
 
   signOut(): Promise<void> {
-    console.log('salir');
     this.afAuth.signOut();
     this.router.navigateByUrl('/login', { replaceUrl: true });
     return;

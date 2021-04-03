@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar class="ion-text-center" color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button *ngIf="start" color="secondary" [defaultHref]="login ? 'home': 'login'" [text]="''">
+      </ion-back-button>
+      <ion-button *ngIf="!start" fill="clear">
+        <ion-icon [hidden]="!start" slot="icon-only" name="menu"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title style="font-size: 30px;" (click)=goTo()>
+      <h1> Sokker DT </h1>
+
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button *ngIf="end" color="secondary"></ion-menu-button>
+
+      <ion-button *ngIf="!end" fill="clear">
+        <ion-icon [hidden]="!end" slot="icon-only" name="menu"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

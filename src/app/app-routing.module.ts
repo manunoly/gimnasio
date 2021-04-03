@@ -21,6 +21,11 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'home',
+    ...canActivate(redirectUnauthorizedToLogin),
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  },
+  {
     path: 'folder/:id',
     loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule),
   },
@@ -30,8 +35,8 @@ const routes: Routes = [
     ...canActivate(redirectLogged),
   },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+    path: 'calendar',
+    loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule),
   },
   {
     path: 'profile',
@@ -56,6 +61,22 @@ const routes: Routes = [
     path: 'verify-email',
     ...canActivate(redirectUnauthorizedToLogin),
     loadChildren: () => import('./verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
+  },
+  {
+    path: 'team',
+    loadChildren: () => import('./team/team.module').then( m => m.TeamPageModule)
+  },
+  {
+    path: 'player/:id',
+    loadChildren: () => import('./player/player.module').then( m => m.PlayerPageModule)
+  },
+  {
+    path: 'sokker-login',
+    loadChildren: () => import('./sokker-login/sokker-login.module').then( m => m.SokkerLoginPageModule)
+  },
+  {
+    path: 'players',
+    loadChildren: () => import('./players/players.module').then( m => m.PlayersPageModule)
   }
 ];
 
