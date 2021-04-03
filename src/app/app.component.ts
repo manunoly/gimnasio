@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
       if (user) {
         this.user = user;
         this.appPages = [
+          { title: 'Sokker Login', url: '/sokker-login', icon: 'football' },
           { title: 'Team', url: '/team', icon: 'people' },
           { title: 'Players', url: '/players', icon: 'paper-plane' },
           { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },

@@ -1,9 +1,48 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>sokker-login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-navbar [start]="true" [end]="true"></app-header-navbar>
 
 <ion-content>
+  <ion-text color="primary">
+    <h1 class="ion-text-center">Sokker login</h1>
+  </ion-text>
 
+  <ion-grid class="roundGrid ion-padding ion-text-center">
+    <br />
+
+      <form [formGroup]="credentialForm">
+        <ion-row class="ion-padding">
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating" color="primary">Soker login</ion-label>
+              <ion-input autofocus="true" formControlName="ilogin"></ion-input>
+            </ion-item>
+            <div *ngIf="(ilogin.dirty || ilogin.touched) && ilogin.errors" class="errors">
+              <span *ngIf="ilogin.errors?.required">login is required</span>
+              <span *ngIf="ilogin.errors?.minlength">To short</span>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-padding">
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Sokker Password</ion-label>
+              <ion-input type="password" formControlName="ipassword"></ion-input>
+            </ion-item>
+            <div *ngIf="(ipassword.dirty || ipassword.touched) && ipassword.errors" class="errors">
+              <span *ngIf="ipassword.errors?.required">Password is required</span>
+              <span *ngIf="ipassword.errors?.minlength">Password needs to be 6 characters</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </form>
+
+      <ion-row class="ion-padding">
+        <ion-col size="8" offset="2">
+          <ion-button [disabled]="!credentialForm.valid" fill="outline" expand="block" shape="round"
+            (click)="sokkerLogin()">
+            Login
+          </ion-button>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
 </ion-content>

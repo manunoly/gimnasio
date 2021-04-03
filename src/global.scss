@@ -29,6 +29,58 @@
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 .containerCenter {
-  display: grid;
-  place-items: center;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+ion-item {
+  --border-color: var(--ion-color-primary);
+}
+
+.fondoAzul {
+  --background: var(--ion-color-primary) !important;
+}
+
+ion-button {
+  --border-color: var(--ion-color-primary);
+}
+
+ion-label {
+  color: var(--ion-color-primary);
+}
+
+.fullText {
+  white-space: nowrap;
+}
+
+.clearfix {
+  display: inline-block;
+  min-width: 250px !important;
+}
+
+.roundGrid {
+  @media screen and (min-width: 790px) {
+    margin-left: 15% !important;
+    margin-right: 15% !important;
+  }
+
+  border: solid 1px var(--ion-color-secondary);
+  border-radius: 20px;
+  padding-bottom: 5px;
+}
+
+.lineBotton {
+  border-bottom: 1px var(--ion-color-primary) solid;
+}
+
+.contentCenter {
+  display: flex;
+  padding: 10vh 10vw;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }

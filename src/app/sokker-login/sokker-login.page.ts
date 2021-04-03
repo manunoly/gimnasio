@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sokker-login',
@@ -6,10 +8,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sokker-login.page.scss'],
 })
 export class SokkerLoginPage implements OnInit {
+  urlSokkerLogin = 'https://sokker.org/start.php?session=xml';
+  credentialForm: FormGroup;
 
-  constructor() { }
+  constructor(
+    private fb: FormBuilder,
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+  ) { }
 
   ngOnInit() {
+    this.credentialForm = this.fb.group({
+      ilogin: ['', [Validators.required, Validators.minLength(3)]],
+      ipassword: ['', [Validators.required, Validators.minLength(6)]]
+    })
   }
 
+  // Easy access for form fields
+  get ilogin() {
+    return this.credentialForm.get('ilogin');
+  }
+
+  get ipassword() {
+    return this.credentialForm.get('ipassword');
+  }
+
+  sokkerLogin(){
+
+  }
 }
