@@ -4,6 +4,13 @@ import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 
+import * as firebaseui from 'firebaseui'
+
+import {
+  FirebaseUISignInSuccessWithAuthResult,
+  FirebaseUISignInFailure,
+} from 'firebaseui-angular';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,12 +25,12 @@ export class LoginPage implements OnInit {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private auth: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.credentialForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -31,24 +38,22 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.auth
-      .signIn(this.credentialForm.value)
-      .then(
-        (res) => {
-          loading.dismiss();
-          this.router.navigateByUrl('/home', { replaceUrl: true });
-        },
-        async (err) => {
-          loading.dismiss();
-          const alert = await this.alertController.create({
-            header: ':(',
-            message: err.message,
-            buttons: ['OK'],
-          });
+    this.auth.signIn(this.credentialForm.value).then(
+      (res) => {
+        loading.dismiss();
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      },
+      async (err) => {
+        loading.dismiss();
+        const alert = await this.alertController.create({
+          header: ':(',
+          message: err.message,
+          buttons: ['OK'],
+        });
 
-          await alert.present();
-        }
-      );
+        await alert.present();
+      }
+    );
   }
 
   // Easy access for form fields
@@ -58,5 +63,17 @@ export class LoginPage implements OnInit {
 
   get password() {
     return this.credentialForm.get('password');
+  }
+
+  successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+    console.log(signInSuccessData);
+  }
+
+  errorCallback(errorData: FirebaseUISignInFailure) {
+    console.log(errorData);
+  }
+
+  uiShownCallback() {
+    console.log('uiShownCallback');
   }
 }

@@ -28,6 +28,9 @@
 // for calendar
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
+// for firebaseui
+// @import '../node_modules/firebaseui/dist/firebaseui.css';
+@import '~firebaseui/dist/firebaseui.css';
 .containerCenter {
   text-align: center;
   position: absolute;
