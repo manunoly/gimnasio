@@ -13,16 +13,12 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.auth.currentUser$.subscribe((user) => {
-      console.log('AppComponent');
       if (user) {
         this.user = user;
         this.appPages = [
           { title: 'Sokker Login', url: '/sokker-login', icon: 'football' },
           { title: 'Team', url: '/team', icon: 'people' },
           { title: 'Players', url: '/players', icon: 'paper-plane' },
-          { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-          { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-          { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
           { title: 'Profile', url: '/profile', icon: 'person' },
         ];
       } else {

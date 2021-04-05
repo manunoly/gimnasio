@@ -32,13 +32,23 @@ export class AuthService {
     private afs: AngularFirestore,
     private router: Router
   ) {
-    this.afAuth.onAuthStateChanged(async (user) => {
+    this.afAuth.onAuthStateChanged((user) => {
+      console.log('afAuth user', user);
       if (user) {
-        console.log('afAuth user', user);
         this.currentUser$.next(user);
-        let userF:User;
-        userF = await this.afs.doc(`/users/${user.uid}`).valueChanges().toPromise() as any;
-        this.currentUser$.next({...user, ...userF});
+        this.afs.doc(`/users/${user.uid}`).valueChanges().pipe(first()).subscribe(userD => {
+          if (userD) {
+            let userF: User = userD as any;
+            this.currentUser$.next({ ...user, ...userF });
+          } else {
+            this.afs.doc(`/users/${user.uid}`).set({
+              uid: user.uid,
+              email: user?.email,
+              displayName: user?.displayName,
+            })
+          }
+        });
+
       } else {
         this.currentUser$.next(null);
       }

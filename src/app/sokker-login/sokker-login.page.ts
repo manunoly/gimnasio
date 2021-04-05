@@ -8,7 +8,6 @@ import { AlertController, LoadingController } from '@ionic/angular';
   styleUrls: ['./sokker-login.page.scss'],
 })
 export class SokkerLoginPage implements OnInit {
-  urlSokkerLogin = 'https://sokker.org/start.php?session=xml';
   credentialForm: FormGroup;
 
   constructor(

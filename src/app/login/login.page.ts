@@ -67,6 +67,7 @@ export class LoginPage implements OnInit {
 
   successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     console.log(signInSuccessData);
+    this.router.navigateByUrl('/home', { replaceUrl: true });
   }
 
   errorCallback(errorData: FirebaseUISignInFailure) {

@@ -3,11 +3,16 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header>Welcome {{user ? user.displayName : ''}}</ion-list-header>
+          <ion-list-header> {{user ? user.displayName : 'Welcome'}}</ion-list-header>
           <ion-note>{{user ? user.email : ''}}
-            <div *ngIf="user && !user.emailVerified">
+            <div *ngIf="user && !user.emailVerified && !user.isAnonymous">
               <ion-text color="danger">
                 You need to verify your email
+              </ion-text>
+            </div>
+            <div *ngIf="user.isAnonymous">
+              <ion-text color="danger">
+                You are <b> Anonymous User</b>
               </ion-text>
             </div>
           </ion-note>
